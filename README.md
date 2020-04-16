@@ -62,3 +62,7 @@ Feel free to fork this project, work on it and then make a pull request.
 # Questions or Suggestions
 
 Feel free to create <a href="https://github.com/thiagodnf/jmetrics/issues">issues</a> here as you need
+
+#License
+
+[MIT](https://github.com/thiagodnf/jmetrics/blob/master/LICENSE)
