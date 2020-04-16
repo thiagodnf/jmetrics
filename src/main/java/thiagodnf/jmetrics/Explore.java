@@ -37,7 +37,7 @@ public class Explore implements Callable<Integer> {
     @Option(names = {"-d", "--debug"}, description = "set the level for debugging one")
     private boolean debug = false;
     
-    @Option(names = {"-r", "--regex"}, description = "set the column separator")
+    @Option(names = {"-r", "--regex"}, description = "set the column separator. Default: ${DEFAULT-VALUE}")
     private String regex = ",";
     
     @Option(names = {"-h", "--help"}, usageHelp = true, description = "display this help and exit")
