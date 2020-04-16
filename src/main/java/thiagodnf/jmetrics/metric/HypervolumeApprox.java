@@ -1,4 +1,4 @@
-package thiagodnf.jmetrics.indicator;
+package thiagodnf.jmetrics.metric;
 
 import java.io.FileNotFoundException;
 import java.util.Collections;
@@ -16,7 +16,7 @@ import org.uma.jmetal.util.solutionattribute.impl.HypervolumeContributionAttribu
 
 public class HypervolumeApprox<S extends Solution<?>> extends Hypervolume<S> {
 
-    private static final long serialVersionUID = -868538120043709827L;
+    private static final long serialVersionUID = -868538120043712827L;
     
     private Point referencePoint;
     
@@ -34,12 +34,6 @@ public class HypervolumeApprox<S extends Solution<?>> extends Hypervolume<S> {
     public HypervolumeApprox() {
     }
 
-    /**
-     * Constructor
-     *
-     * @param referenceParetoFrontFile
-     * @throws FileNotFoundException
-     */
     public HypervolumeApprox(String referenceParetoFrontFile) throws FileNotFoundException {
         super(referenceParetoFrontFile);
         numberOfObjectives = referenceParetoFront.getPointDimensions();
@@ -47,11 +41,6 @@ public class HypervolumeApprox<S extends Solution<?>> extends Hypervolume<S> {
         updateReferencePoint(referenceParetoFront);
     }
 
-    /**
-     * Constructor
-     *
-     * @param referenceParetoFront
-     */
     public HypervolumeApprox(Front referenceParetoFront) {
         super(referenceParetoFront);
         numberOfObjectives = referenceParetoFront.getPointDimensions();
