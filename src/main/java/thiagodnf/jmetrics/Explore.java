@@ -65,6 +65,7 @@ public class Explore implements Callable<Integer> {
         log.info("Starting");
         log.info("Folder: \033[0;32m {} \u001b[0m", folder);
         log.info("Metrics: \033[0;32m {} \u001b[0m", metrics);
+        log.info("Separator: \033[0;32m {} \u001b[0m", separator);
         
         List<ParetoFront> paretoFronts = ImportUtils.readParetoFronts(folder, separator);
         
