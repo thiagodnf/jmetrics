@@ -32,13 +32,13 @@ public class Explore implements Callable<Integer> {
     @Parameters(paramLabel = "folder", description = "folder that has the input files")
     private Path folder;
 
-    @Option(names = { "-m", "--metrics" }, arity = "1..*", description = "values: ${COMPLETION-CANDIDATES}\nDefault: ${DEFAULT-VALUE}")
+    @Option(names = { "-m", "--metrics" }, arity = "1..*", description = "set the metrics to be calculated\nvalues: ${COMPLETION-CANDIDATES}\ndefault: ${DEFAULT-VALUE}")
     private List<MetricType> metrics = Arrays.asList(MetricType.IGD);
 
     @Option(names = { "-d", "--debug" }, description = "set the level for debugging one")
     private boolean debug = false;
 
-    @Option(names = { "-s", "--separator" }, description = "values: ${COMPLETION-CANDIDATES}\nDefault: ${DEFAULT-VALUE}")
+    @Option(names = { "-s", "--separator" }, description = "set the column separator\nvalues: ${COMPLETION-CANDIDATES}\ndefault: ${DEFAULT-VALUE}")
     private Separator separator = Separator.Space;
 
     @Option(names = { "-h", "--help" }, usageHelp = true, description = "display this help and exit")
