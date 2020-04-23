@@ -16,12 +16,13 @@ import org.uma.jmetal.solution.Solution;
 import org.uma.jmetal.util.point.PointSolution;
 
 import lombok.extern.slf4j.Slf4j;
+import thiagodnf.jmetrics.constant.Separator;
 import thiagodnf.jmetrics.model.ParetoFront;
 
 @Slf4j
 public class ImportUtils {
     
-    public static List<Solution<?>> getFromFile(File file, String regex) {
+    public static List<Solution<?>> getFromFile(File file, Separator separator) {
         
         log.debug("Reading file: \033[0;32m {} \u001b[0m", file.getName());
         
@@ -39,7 +40,7 @@ public class ImportUtils {
                 
                 String line = it.nextLine();
                 
-                String[] split = line.split(regex);
+                String[] split = line.split(separator.getRegex());
                 
                 if (split.length == 1 && split[0].isEmpty()) {
                     continue;
@@ -84,7 +85,7 @@ public class ImportUtils {
               .collect(Collectors.toList());
     }
     
-    public static Optional<ParetoFront> readApproxParetoFront(Path directory, String regex) throws IOException {
+    public static Optional<ParetoFront> readApproxParetoFront(Path directory, Separator separator) throws IOException {
 
         log.info("Reading Approx pareto-front from the directory");
         
@@ -94,7 +95,7 @@ public class ImportUtils {
             return Optional.empty();
         }
 
-        List<Solution<?>> solutions = getFromFile(file.toFile(), regex);
+        List<Solution<?>> solutions = getFromFile(file.toFile(), separator);
 
         solutions = ParetoFrontUtils.removeRepeatedSolutions(solutions);
 
@@ -110,11 +111,11 @@ public class ImportUtils {
      * pareto-front.txt file
      * 
      * @param directory to read the files
-     * @param regex the separator
+     * @param separator the separator
      * @return a list of pareto-fronts
      * @throws IOException if an I/O error is thrown when accessing the starting file.
      */
-    public static List<ParetoFront> readParetoFronts(Path directory, String regex) throws IOException {
+    public static List<ParetoFront> readParetoFronts(Path directory, Separator separator) throws IOException {
 
         log.info("Reading all pareto-fronts on directory");
         
@@ -124,7 +125,7 @@ public class ImportUtils {
 
         for (Path file : files) {
 
-            List<Solution<?>> solutions = getFromFile(file.toFile(), regex);
+            List<Solution<?>> solutions = getFromFile(file.toFile(), separator);
 
             solutions = ParetoFrontUtils.removeRepeatedSolutions(solutions);
 

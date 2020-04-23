@@ -13,12 +13,13 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Preconditions.checkArgument;
 
 import lombok.extern.slf4j.Slf4j;
+import thiagodnf.jmetrics.constant.Separator;
 import thiagodnf.jmetrics.model.ParetoFront;
 
 @Slf4j
 public class ParetoFrontUtils {
     
-    public static Optional<ParetoFront> generateApproxParetoFront(Path folder, String regex, List<ParetoFront> paretoFronts) throws IOException {
+    public static Optional<ParetoFront> generateApproxParetoFront(Path folder, Separator separator, List<ParetoFront> paretoFronts) throws IOException {
         
         log.info("Generating approx pareto-front");
         
@@ -35,7 +36,7 @@ public class ParetoFrontUtils {
         
         ParetoFront approxParetoFront = new ParetoFront(file, allParetoFronts);
         
-        ExportUtils.toFile(file, approxParetoFront, regex);
+        ExportUtils.toFile(file, approxParetoFront, separator);
         
         log.info("Done");
         

@@ -9,6 +9,7 @@ import java.util.List;
 import org.uma.jmetal.solution.Solution;
 
 import lombok.extern.slf4j.Slf4j;
+import thiagodnf.jmetrics.constant.Separator;
 import thiagodnf.jmetrics.constant.MetricType;
 import thiagodnf.jmetrics.model.ParetoFront;
 
@@ -52,7 +53,7 @@ public class ExportUtils {
         log.info("Done");
     }
     
-    public static void toFile(Path file, ParetoFront paretoFront, String regex) throws IOException {
+    public static void toFile(Path file, ParetoFront paretoFront, Separator separator) throws IOException {
 
         List<String> lines = new ArrayList<>();
 
@@ -70,7 +71,7 @@ public class ExportUtils {
                     row.add(String.valueOf(solutions.get(i).getObjective(j)));
                 }
 
-                lines.add(String.join(",", row));
+                lines.add(String.join(separator.getRegex(), row));
             }
         }
 

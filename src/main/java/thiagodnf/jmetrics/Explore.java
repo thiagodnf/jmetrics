@@ -17,6 +17,7 @@ import picocli.CommandLine;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
 import picocli.CommandLine.Parameters;
+import thiagodnf.jmetrics.constant.Separator;
 import thiagodnf.jmetrics.constant.MetricType;
 import thiagodnf.jmetrics.model.ParetoFront;
 import thiagodnf.jmetrics.util.ExportUtils;
@@ -34,15 +35,15 @@ public class Explore implements Callable<Integer> {
     @Option(names = { "-m", "--metrics" }, arity = "1..*", description = "values: ${COMPLETION-CANDIDATES}\nDefault: ${DEFAULT-VALUE}")
     private List<MetricType> metrics = Arrays.asList(MetricType.IGD);
 
-    @Option(names = {"-d", "--debug"}, description = "set the level for debugging one")
+    @Option(names = { "-d", "--debug" }, description = "set the level for debugging one")
     private boolean debug = false;
-    
-    @Option(names = {"-r", "--regex"}, description = "set the column separator. Default: ${DEFAULT-VALUE}")
-    private String regex = ",";
-    
-    @Option(names = {"-h", "--help"}, usageHelp = true, description = "display this help and exit")
+
+    @Option(names = { "-s", "--separator" }, description = "values: ${COMPLETION-CANDIDATES}\nDefault: ${DEFAULT-VALUE}")
+    private Separator separator = Separator.Space;
+
+    @Option(names = { "-h", "--help" }, usageHelp = true, description = "display this help and exit")
     private boolean help;
-    
+
     public static void main(String[] args) throws IOException {
 
         int exitCode = new CommandLine(new Explore())
@@ -65,15 +66,15 @@ public class Explore implements Callable<Integer> {
         log.info("Folder: \033[0;32m {} \u001b[0m", folder);
         log.info("Metrics: \033[0;32m {} \u001b[0m", metrics);
         
-        List<ParetoFront> paretoFronts = ImportUtils.readParetoFronts(folder, regex);
+        List<ParetoFront> paretoFronts = ImportUtils.readParetoFronts(folder, separator);
         
-        Optional<ParetoFront> approxParetoFront = ImportUtils.readApproxParetoFront(folder, regex);
+        Optional<ParetoFront> approxParetoFront = ImportUtils.readApproxParetoFront(folder, separator);
 
         if (!approxParetoFront.isPresent()) {
 
             log.info("File not found");
 
-            approxParetoFront = ParetoFrontUtils.generateApproxParetoFront(folder, regex, paretoFronts);
+            approxParetoFront = ParetoFrontUtils.generateApproxParetoFront(folder, separator, paretoFronts);
         }
 
         log.info("Calculate metrics for all files");
