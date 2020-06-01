@@ -11,6 +11,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.LineIterator;
 import org.uma.jmetal.solution.Solution;
 import org.uma.jmetal.util.point.PointSolution;
@@ -115,11 +116,15 @@ public class ImportUtils {
      * @return a list of pareto-fronts
      * @throws IOException if an I/O error is thrown when accessing the starting file.
      */
-    public static List<ParetoFront> readParetoFronts(Path directory, Separator separator) throws IOException {
+    public static List<ParetoFront> readParetoFronts(Path directory, String pfStartWith, Separator separator) throws IOException {
 
         log.info("Reading all pareto-fronts on directory");
         
         List<Path> files = ImportUtils.readFilesGivenADirectory(directory);
+        
+        files = files.stream()
+                .filter(el -> FilenameUtils.getName(el.toString()).startsWith(pfStartWith))
+                .collect(Collectors.toList());
 
         List<ParetoFront> paretoFronts = new ArrayList<>();
 
@@ -136,4 +141,9 @@ public class ImportUtils {
 
         return paretoFronts;
     }
+    
+    public static List<ParetoFront> readParetoFronts(Path directory, Separator separator) throws IOException {
+        return readParetoFronts(directory, "fun_", separator);
+    }
+
 }
