@@ -64,6 +64,8 @@ $ jmetrics src/target-folder -s comma --metrics hypervolume igd
 
 If there is not pareto-front.txt in this folder, the tool will generante an approximate pareto-front based on the files and save this new front in the same directory. If everything is ok, a ```result.csv``` is going to be generated.
 
+If you want to see an example, please [click here](https://github.com/thiagodnf/jmetrics/tree/main/src/main/resources/examples/no-approx-pareto-front)
+
 ## Questions or Suggestions
 
 Feel free to create <a href="https://github.com/thiagodnf/jmetrics/issues">issues</a> here as you need
