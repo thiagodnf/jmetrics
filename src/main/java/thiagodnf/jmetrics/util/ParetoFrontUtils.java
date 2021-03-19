@@ -1,5 +1,8 @@
 package thiagodnf.jmetrics.util;
 
+import static com.google.common.base.Preconditions.checkArgument;
+import static com.google.common.base.Preconditions.checkNotNull;
+
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -8,9 +11,6 @@ import java.util.Optional;
 
 import org.uma.jmetal.solution.Solution;
 import org.uma.jmetal.util.SolutionListUtils;
-
-import static com.google.common.base.Preconditions.checkNotNull;
-import static com.google.common.base.Preconditions.checkArgument;
 
 import lombok.extern.slf4j.Slf4j;
 import thiagodnf.jmetrics.constant.Separator;
