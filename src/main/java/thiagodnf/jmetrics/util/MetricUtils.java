@@ -1,5 +1,6 @@
 package thiagodnf.jmetrics.util;
 
+import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,10 +27,22 @@ import thiagodnf.jmetrics.model.ParetoFront;
 @Slf4j
 public class MetricUtils {
     
-    public static void calculate(ParetoFront approxParetoFront, ParetoFront paretoFront, List<MetricType> metrics) {
-
-        log.debug("Calculating metrics for: \033[0;32m {} \u001b[0m", paretoFront.getPath().toFile().getName());
+    public static void calculate(ParetoFront approxParetoFront, List<ParetoFront> paretoFronts, EnumSet<MetricType> metrics) {
         
+        log.info("Calculate metrics for all files");
+
+        int done = 1;
+
+        for (ParetoFront paretoFront : paretoFronts) {
+
+            log.info("[{}/{}] Metrics for {}", done++, paretoFronts.size(), paretoFront.getPath());
+
+            MetricUtils.calculate(approxParetoFront, paretoFront, metrics);
+        }
+    }
+    
+    public static void calculate(ParetoFront approxParetoFront, ParetoFront paretoFront, EnumSet<MetricType> metrics) {
+
         Map<String, Double> values = new HashMap<>();
         
         Front referenceFront = new ArrayFront(approxParetoFront.getSolutions());

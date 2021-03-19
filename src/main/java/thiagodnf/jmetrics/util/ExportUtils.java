@@ -1,24 +1,25 @@
 package thiagodnf.jmetrics.util;
 
-import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.List;
 
 import org.uma.jmetal.solution.Solution;
 
 import lombok.extern.slf4j.Slf4j;
-import thiagodnf.jmetrics.constant.Separator;
 import thiagodnf.jmetrics.constant.MetricType;
+import thiagodnf.jmetrics.constant.Separator;
 import thiagodnf.jmetrics.model.ParetoFront;
 
 @Slf4j
 public class ExportUtils {
     
-    public static void toCSV(Path folder, List<ParetoFront> paretoFronts, List<MetricType> metrics) throws IOException {
+    public static void toCSV(Path folder, List<ParetoFront> paretoFronts, EnumSet<MetricType> metrics) {
 
         log.info("Generating output as result.csv file");
+        
+        Path output = folder.resolve("result.csv");
 
         List<String> lines = new ArrayList<>();
 
@@ -37,10 +38,9 @@ public class ExportUtils {
 
             List<String> row = new ArrayList<>();
 
-            row.add(paretoFront.getPath().getFileName().toString());
+            row.add(paretoFront.getPath().toString());
 
             for (MetricType metricType : metrics) {
-
                 row.add(String.valueOf(paretoFront.getMetrics().get(metricType.toString())));
                 row.add(String.valueOf(paretoFront.getMetrics().get(metricType.toString() + "(N)")));
             }
@@ -48,12 +48,12 @@ public class ExportUtils {
             lines.add(String.join(",", row));
         }
 
-        Files.write(folder.resolve("result.csv"), lines);
-
-        log.info("Done");
+        FileUtils.write(output, lines);
+        
+        log.info("[1/1] {}", output);
     }
     
-    public static void toFile(Path file, ParetoFront paretoFront, Separator separator) throws IOException {
+    public static void toFile(Path file, ParetoFront paretoFront, Separator separator) {
 
         List<String> lines = new ArrayList<>();
 
@@ -74,7 +74,7 @@ public class ExportUtils {
                 lines.add(String.join(separator.getRegex(), row));
             }
         }
-
-        Files.write(file, lines);
+        
+        FileUtils.write(file, lines);       
     }
 }

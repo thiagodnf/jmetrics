@@ -3,11 +3,10 @@ package thiagodnf.jmetrics.util;
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 
-import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import org.uma.jmetal.solution.Solution;
 import org.uma.jmetal.util.SolutionListUtils;
@@ -19,28 +18,63 @@ import thiagodnf.jmetrics.model.ParetoFront;
 @Slf4j
 public class ParetoFrontUtils {
     
-    public static Optional<ParetoFront> generateApproxParetoFront(Path folder, Separator separator, List<ParetoFront> paretoFronts) throws IOException {
+    public static ParetoFront readOrGenerateParetoFront(Path folder, Separator separator, List<ParetoFront> paretoFronts ) {
+        
+        checkArgument(FileUtils.isValid(folder), "folder should be valid");
+        checkNotNull(separator, "separator should be null");
+        checkNotNull(paretoFronts, "paretoFronts should be null");
+        
+        ParetoFront approxParetoFront = null;
+        
+        Path pfFile = folder.resolve("pareto-front.txt");
+
+        if (Files.exists(pfFile)) {
+            approxParetoFront = readApproxParetoFront(pfFile, separator);
+        } else {
+            approxParetoFront = generateApproxParetoFront(pfFile, separator, paretoFronts);
+        }
+        
+        log.info("[1/1] {}", pfFile);
+        
+        return approxParetoFront;
+    }
+    
+    private static ParetoFront readApproxParetoFront(Path file, Separator separator) {
+
+        checkArgument(FileUtils.isValid(file), "file should be valid");
+        checkNotNull(separator, "separator should be null");
+
+        log.info("Reading approx pareto-front from the directory");
+
+        List<Solution<?>> solutions = ImportUtils.getFromFile(file, separator);
+
+        solutions = ParetoFrontUtils.removeRepeatedSolutions(solutions);
+        solutions = ParetoFrontUtils.removeDominatedSolutions(solutions);
+
+        return new ParetoFront(file, solutions);
+    }
+    
+    public static ParetoFront generateApproxParetoFront(Path file, Separator separator, List<ParetoFront> paretoFronts) {
+        
+        checkNotNull(separator, "separator should be null");
+        checkNotNull(paretoFronts, "paretoFronts should be null");
         
         log.info("Generating approx pareto-front");
         
-        List<Solution<?>> allParetoFronts = new ArrayList<>();
+        List<Solution<?>> allSolutions = new ArrayList<>();
 
         for (ParetoFront paretoFront : paretoFronts) {
-            allParetoFronts.addAll(paretoFront.getSolutions());
+            allSolutions.addAll(paretoFront.getSolutions());
         }
 
-        allParetoFronts = ParetoFrontUtils.removeRepeatedSolutions(allParetoFronts);
-        allParetoFronts = ParetoFrontUtils.removeDominatedSolutions(allParetoFronts);
+        allSolutions = ParetoFrontUtils.removeRepeatedSolutions(allSolutions);
+        allSolutions = ParetoFrontUtils.removeDominatedSolutions(allSolutions);
         
-        Path file = folder.resolve("pareto-front.txt");
-        
-        ParetoFront approxParetoFront = new ParetoFront(file, allParetoFronts);
+        ParetoFront approxParetoFront = new ParetoFront(file, allSolutions);
         
         ExportUtils.toFile(file, approxParetoFront, separator);
         
-        log.info("Done");
-        
-        return Optional.of(approxParetoFront);
+        return approxParetoFront;
     }
 
     public static List<Solution<?>> removeDominatedSolutions(List<Solution<?>> population) {
