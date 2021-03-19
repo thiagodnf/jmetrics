@@ -30,7 +30,7 @@ This tool supports the following features:
 To see all options, just type:
 
 ```sh
-$ jMetrics --help
+$ jmetrics --help
 ```
 
 The output:
