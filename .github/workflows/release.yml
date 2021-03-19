@@ -1,0 +1,103 @@
+# This is a basic workflow that is manually triggered
+
+name: Release
+
+# Controls when the action will run. Workflow runs when manually triggered using the UI
+# or API.
+on:
+  workflow_dispatch:
+    # Inputs the workflow accepts.
+    branches: [ main ]
+    inputs:
+      version:
+        description: 'New Release'
+        default: '0.0.1'
+        required: true
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+    build:
+        name: Create Release
+        runs-on: ubuntu-latest
+        steps:
+          - name: Cache Maven packages
+            uses: actions/cache@v2
+            with:
+              path: ~/.m2
+              key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+              restore-keys: ${{ runner.os }}-m2
+        
+          - name: Checkout code
+            uses: actions/checkout@v2
+            
+          - name: Set up JDK 1.8
+            uses: actions/setup-java@v1
+            with:
+              java-version: 1.8
+            
+          - name: Updating Version
+            run: mvn versions:set -DnewVersion=${{ github.event.inputs.version }}
+            
+          - name: Build with Maven
+            run: mvn -B package --file pom.xml
+
+          - run: mkdir staging && cp target/*.jar staging
+                
+          - name: Commit files # commit the output folder
+            run: |
+              git config --local user.email "actions@github.com"
+              git config --local user.name "Github Actions"
+              git add pom.xml
+              git commit -m "Prepare for next version ${{ github.event.inputs.version }}"
+            
+          - name: Push changes # push the output folder to your repo
+            uses: ad-m/github-push-action@master
+            with:
+              branch: main
+              github_token: ${{ secrets.GITHUB_TOKEN }}
+              force: true
+            
+          - name: Create Release on Github
+            uses: softprops/action-gh-release@v1
+            # if: startsWith(github.ref, 'refs/tags/')
+            with:
+              name: v${{ github.event.inputs.version }}
+              tag_name: v${{ github.event.inputs.version }}
+              files: staging/*
+            env:
+              GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+          # - name: Create Release
+          #   id: create_release
+          #   uses: actions/create-release@v1
+          #   env:
+          #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
+          #   with:
+          #     tag_name: v${{ github.event.inputs.version }}
+          #     release_name: v${{ github.event.inputs.version }}
+          #     body: ${{ github.event.inputs.description }}
+          #     draft: false
+          #     prerelease: false
+
+          # - name: Upload Release Asset
+          #   id: upload-release-asset 
+          #   uses: actions/upload-release-asset@v1
+          #   env:
+          #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          #   with:
+          #     upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
+          #     asset_path: staging
+          #     asset_name: my-artifact.zip
+          #     asset_content_type: application/zip
+                    
+          # - name: Save on Github Packages
+          #   run: mvn -B deploy
+          #   env:
+          #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}                    
+                    
+          
+
+          # - uses: actions/upload-artifact@v2
+          #   with:
+          #     name: Artifacts
+          #     path: staging
