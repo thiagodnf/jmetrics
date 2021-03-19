@@ -7,7 +7,7 @@ name: Release
 on:
   workflow_dispatch:
     # Inputs the workflow accepts.
-    branches: [ main ]
+    branches: [ master ]
     inputs:
       version:
         description: 'New Release'
