@@ -61,14 +61,21 @@ $ jmetrics src/target-folder -s comma --metrics hypervolume igd
 
 If there is not pareto-front.txt in this folder, the tool will generante an approximate pareto-front based on the files and save this new front in the same directory. If everything is ok, a ```result.csv``` is going to be generated.
 
-# Contributions
-
-Feel free to fork this project, work on it and then make a pull request.
-
-# Questions or Suggestions
+## Questions or Suggestions
 
 Feel free to create <a href="https://github.com/thiagodnf/jmetrics/issues">issues</a> here as you need
 
-# License
+## Contribute
 
-[MIT](https://github.com/thiagodnf/jmetrics/blob/master/LICENSE)
+Contributions to the this project are very welcome! We can't do this alone! Feel free to fork this project, work on it and then make a pull request.
+
+## Authors
+
+* **Thiago Ferreira** - *Initial work*
+
+See also the list of [contributors](https://github.com/thiagodnf/jmetrics/graphs/contributors) who participated in this project.
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details
+
