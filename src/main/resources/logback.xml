@@ -9,8 +9,8 @@
         </encoder>
     </appender>
     
-    <logger name="thiagodnf" level="debug" additivity="false">
-        <appender-ref ref="STDOUT" />
+    <logger name="com.javabydeveloper.lombok" level="debug" additivity="false">
+        <appender-ref ref="STDOUT"/>
     </logger>
     
     <root level="error">
