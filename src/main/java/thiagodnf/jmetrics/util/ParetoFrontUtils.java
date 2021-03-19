@@ -51,7 +51,7 @@ public class ParetoFrontUtils {
             return population;
         }
 
-        return SolutionListUtils.getNondominatedSolutions(population);
+        return SolutionListUtils.getNonDominatedSolutions(population);
     }
     
     public static List<Solution<?>> removeRepeatedSolutions(List<Solution<?>> population){
