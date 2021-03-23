@@ -34,7 +34,7 @@ public class Launcher implements Callable<Integer> {
     private Path folder = null;
 
     @Option(names = { "-m", "--metrics" }, arity = "1..*", description = "set the metrics to be calculated\nvalues: ${COMPLETION-CANDIDATES}\ndefault: ${DEFAULT-VALUE}")
-    private EnumSet<MetricType> metrics = EnumSet.of(MetricType.IGD, MetricType.Hypervolume);
+    private EnumSet<MetricType> metrics = EnumSet.of(MetricType.IGD, MetricType.Hypervolume, MetricType.Contribution, MetricType.ProportionalContribution);
 
     @Option(names = { "-s", "--separator" }, description = "set the column separator\nvalues: ${COMPLETION-CANDIDATES}\ndefault: ${DEFAULT-VALUE}")
     private Separator separator = Separator.Space;

@@ -21,7 +21,9 @@ import org.uma.jmetal.util.point.PointSolution;
 
 import lombok.extern.slf4j.Slf4j;
 import thiagodnf.jmetrics.constant.MetricType;
+import thiagodnf.jmetrics.metric.Contribution;
 import thiagodnf.jmetrics.metric.HypervolumeApprox;
+import thiagodnf.jmetrics.metric.ProportionalContribution;
 import thiagodnf.jmetrics.model.ParetoFront;
 
 @Slf4j
@@ -91,6 +93,16 @@ public class MetricUtils {
         
         if (metrics.contains(MetricType.ErrorRatio)) {
             values.put(MetricType.ErrorRatio.toString(), new ErrorRatio<List<? extends Solution<?>>>(referenceFront).evaluate(paretoFront.getSolutions()));
+        }
+        
+        if (metrics.contains(MetricType.Contribution)) {
+            values.put(MetricType.Contribution + "(N)", new Contribution<PointSolution>(normalizedReferenceFront).evaluate(normalizedPopulation));
+            values.put(MetricType.Contribution.toString(), new Contribution<Solution<?>>(referenceFront).evaluate(paretoFront.getSolutions()));
+        }
+        
+        if (metrics.contains(MetricType.ProportionalContribution)) {
+            values.put(MetricType.ProportionalContribution + "(N)", new ProportionalContribution<PointSolution>(normalizedReferenceFront).evaluate(normalizedPopulation));
+            values.put(MetricType.ProportionalContribution.toString(), new ProportionalContribution<Solution<?>>(referenceFront).evaluate(paretoFront.getSolutions()));
         }
 
         paretoFront.setMetrics(values);

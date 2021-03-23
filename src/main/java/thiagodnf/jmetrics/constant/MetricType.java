@@ -20,6 +20,10 @@ public enum MetricType {
     
     ErrorRatio,
     
+    Contribution,
+    
+    ProportionalContribution,
+    
     ALL
     
     ;

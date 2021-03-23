@@ -10,6 +10,8 @@ import java.util.List;
 
 import org.uma.jmetal.solution.Solution;
 import org.uma.jmetal.util.SolutionListUtils;
+import org.uma.jmetal.util.front.Front;
+import org.uma.jmetal.util.point.Point;
 
 import lombok.extern.slf4j.Slf4j;
 import thiagodnf.jmetrics.constant.Separator;
@@ -123,6 +125,23 @@ public class ParetoFrontUtils {
         return false;
     }
     
+    public static boolean contains(Front front, Point p1) {
+
+        checkNotNull(front, "front cannot be null");
+        checkNotNull(p1, "p1 cannot be null");
+
+        for (int i = 0; i < front.getNumberOfPoints(); i++) {
+
+            Point p2 = front.getPoint(i);
+
+            if (isEqual(p1, p2)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+    
     public static boolean isEqual(Solution<?> s1, Solution<?> s2) {
         
         checkNotNull(s1, "Soluton s1 cannot be null");
@@ -132,6 +151,22 @@ public class ParetoFrontUtils {
         for (int i = 0; i < s1.getNumberOfObjectives(); i++) {
             
             if (s1.getObjective(i) != s2.getObjective(i)) {
+                return false;
+            }
+        }
+
+        return true;
+    } 
+    
+    public static boolean isEqual(Point p1, Point p2) {
+        
+        checkNotNull(p1, "p1 cannot be null");
+        checkNotNull(p2, "p2 cannot be null");
+        checkArgument(p1.getDimension() == p2.getDimension(), "points should have the same dimension");
+        
+        for (int i = 0; i < p1.getDimension(); i++) {
+            
+            if (p1.getValue(i) != p2.getValue(i)) {
                 return false;
             }
         }

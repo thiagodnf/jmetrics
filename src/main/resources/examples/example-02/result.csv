@@ -1,0 +1,5 @@
+file,Hypervolume,Hypervolume(N),IGD,IGD(N),Contribution,Contribution(N),ProportionalContribution,ProportionalContribution(N)
+C:\Users\thiag\Workspace\jmetrics\src\main\resources\examples\example-02\algo-1\fun-1.txt,0.0,0.30980392156862746,2.348536778506992,0.12308900640859183,2.0,2.0,0.25,0.25
+C:\Users\thiag\Workspace\jmetrics\src\main\resources\examples\example-02\algo-2\fun-1.txt,0.0,0.6490196078431373,2.207940216581962,0.0750792545492283,4.0,4.0,0.5,0.5
+C:\Users\thiag\Workspace\jmetrics\src\main\resources\examples\example-02\algo-3\fun-1.txt,0.0,0.4450980392156863,2.069118169655856,0.07818589034265445,1.0,1.0,0.125,0.125
+C:\Users\thiag\Workspace\jmetrics\src\main\resources\examples\example-02\algo-4\fun-1.txt,0.0,0.12156862745098038,5.361902647381804,0.18705477063270856,1.0,1.0,0.125,0.125
