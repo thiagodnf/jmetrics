@@ -26,6 +26,9 @@ This tool supports the following features:
     - IGDPlus
     - Spread
     - ErrorRatio
+    - Contribution
+    - ProportionalContribution
+    
 - Generate an approximate pareto-front
 - Export the results as .csv files
 
