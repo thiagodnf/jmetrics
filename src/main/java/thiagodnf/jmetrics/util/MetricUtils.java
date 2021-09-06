@@ -22,7 +22,9 @@ import org.uma.jmetal.util.point.PointSolution;
 import lombok.extern.slf4j.Slf4j;
 import thiagodnf.jmetrics.constant.MetricType;
 import thiagodnf.jmetrics.metric.Contribution;
+import thiagodnf.jmetrics.metric.ExecutionTime;
 import thiagodnf.jmetrics.metric.HypervolumeApprox;
+import thiagodnf.jmetrics.metric.NumberOfSolutions;
 import thiagodnf.jmetrics.metric.ProportionalContribution;
 import thiagodnf.jmetrics.model.ParetoFront;
 
@@ -103,6 +105,16 @@ public class MetricUtils {
         if (metrics.contains(MetricType.ProportionalContribution)) {
             values.put(MetricType.ProportionalContribution + "(N)", new ProportionalContribution<PointSolution>(normalizedReferenceFront).evaluate(normalizedPopulation));
             values.put(MetricType.ProportionalContribution.toString(), new ProportionalContribution<Solution<?>>(referenceFront).evaluate(paretoFront.getSolutions()));
+        }
+        
+        if (metrics.contains(MetricType.ExecutionTime)) {
+            values.put(MetricType.ExecutionTime + "(N)", new ExecutionTime<PointSolution>(normalizedReferenceFront).evaluate(paretoFront));
+            values.put(MetricType.ExecutionTime.toString(), new ExecutionTime<Solution<?>>(referenceFront).evaluate(paretoFront));
+        }
+        
+        if (metrics.contains(MetricType.NumberOfSolutions)) {
+            values.put(MetricType.NumberOfSolutions + "(N)", new NumberOfSolutions<PointSolution>(normalizedReferenceFront).evaluate(paretoFront));
+            values.put(MetricType.NumberOfSolutions.toString(), new NumberOfSolutions<Solution<?>>(referenceFront).evaluate(paretoFront));
         }
 
         paretoFront.setMetrics(values);

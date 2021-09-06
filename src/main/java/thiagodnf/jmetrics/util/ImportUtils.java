@@ -6,9 +6,13 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import org.apache.commons.io.FilenameUtils;
 import org.uma.jmetal.solution.Solution;
 import org.uma.jmetal.util.point.PointSolution;
 
@@ -85,23 +89,45 @@ public class ImportUtils {
      */
     public static List<ParetoFront> readParetoFronts(Path directory, Separator separator) throws IOException {
 
-        log.info("Reading all pareto-fronts from the directory");
-        
-        List<Path> files = FileUtils.getFilesFromFolder(directory, ".txt");
+        log.info("Reading all pareto-fronts from {}", directory);
+
+        List<Path> funs = FileUtils.getFilesFromFolder(directory, "fun_(.*).txt");
+        List<Path> executionTimes = FileUtils.getFilesFromFolder(directory, "exe_(.*).txt");
+
+        Map<Path, Path> mapExe = new HashMap<>();
+
+        for (Path p : executionTimes) {
+            mapExe.put(p, p);
+        }
         
         List<ParetoFront> paretoFronts = new ArrayList<>();
         
         int done = 1;
 
-        for (Path file : files) {
+        for (Path file : funs) {
 
-            log.info("[{}/{}] {}", done++, files.size(), file);
+            log.info("[{}/{}] {}", done++, funs.size(), file);
+
+            
             
             List<Solution<?>> solutions = getFromFile(file, separator);
 
             solutions = ParetoFrontUtils.removeRepeatedSolutions(solutions);
 
-            paretoFronts.add(new ParetoFront(file, solutions));
+            ParetoFront paretoFront = new ParetoFront(file, solutions);
+            
+            
+            String basename = FilenameUtils.getBaseName(file.toString());
+            String path = file.getParent().toString();
+            long id = Long.parseLong(basename.split("_")[1]);
+            
+            Path key = mapExe.get(Paths.get(path, "exe_" + id + ".txt"));
+
+            if(key != null) {
+                paretoFront.setExecutionTime(Long.parseLong(Files.readString(key)));
+            }
+            
+            paretoFronts.add(paretoFront);
         }
         
         return paretoFronts;

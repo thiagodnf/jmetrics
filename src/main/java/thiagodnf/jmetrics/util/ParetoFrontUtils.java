@@ -5,9 +5,13 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
+import org.apache.commons.io.FilenameUtils;
 import org.uma.jmetal.solution.Solution;
 import org.uma.jmetal.util.SolutionListUtils;
 import org.uma.jmetal.util.front.Front;
@@ -35,6 +39,8 @@ public class ParetoFrontUtils {
         } else {
             approxParetoFront = generateApproxParetoFront(pfFile, separator, paretoFronts);
         }
+        
+        generatePFKnownParetoFront(pfFile, separator, paretoFronts);
         
         log.info("[1/1] {}", pfFile);
         
@@ -77,6 +83,47 @@ public class ParetoFrontUtils {
         ExportUtils.toFile(file, approxParetoFront, separator);
         
         return approxParetoFront;
+    }
+    
+    public static void generatePFKnownParetoFront(Path file, Separator separator, List<ParetoFront> paretoFronts) {
+        
+        checkNotNull(separator, "separator should be null");
+        checkNotNull(paretoFronts, "paretoFronts should be null");
+        
+        log.info("Generating PFKnown pareto-front");
+        
+        Set<String> basenames = new HashSet<>();
+        
+        for (ParetoFront pf : paretoFronts) {
+            basenames.add(pf.getPath().getParent().toString());
+        }
+        
+        for (String basename : basenames) {
+
+            List<ParetoFront> filtered = new ArrayList<>();
+
+            for (ParetoFront pf : paretoFronts) {
+
+                if (pf.getPath().toString().startsWith(basename)) {
+                    filtered.add(pf);
+                }
+            }
+
+            List<Solution<?>> allSolutions = new ArrayList<>();
+
+            for (ParetoFront pf : filtered) {
+                allSolutions.addAll(pf.getSolutions());
+            }
+            
+            allSolutions = ParetoFrontUtils.removeRepeatedSolutions(allSolutions);
+            allSolutions = ParetoFrontUtils.removeDominatedSolutions(allSolutions);
+
+            ParetoFront pfknownParetoFront = new ParetoFront(file, allSolutions);
+            
+            ExportUtils.toFile(Paths.get(basename).resolve("pfknow.txt"), pfknownParetoFront, separator);
+            
+            System.out.println(filtered.size());
+        }
     }
 
     public static List<Solution<?>> removeDominatedSolutions(List<Solution<?>> population) {

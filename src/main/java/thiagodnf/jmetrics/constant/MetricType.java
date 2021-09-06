@@ -24,6 +24,10 @@ public enum MetricType {
     
     ProportionalContribution,
     
+    ExecutionTime,
+    
+    NumberOfSolutions,
+    
     ALL
     
     ;

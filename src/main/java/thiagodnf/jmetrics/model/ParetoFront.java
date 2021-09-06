@@ -20,6 +20,8 @@ public class ParetoFront {
 
     protected Map<String, Double> metrics;
     
+    protected long executionTime;
+    
     public ParetoFront(Path path, List<Solution<?>> solutions) {
         this.path = path;
         this.solutions = solutions;

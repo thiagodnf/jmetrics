@@ -19,15 +19,15 @@ public class FileUtils {
      * 
      * @throws IOException if an I/O error occurs 
      */
-    public static List<Path> getFilesFromFolder(Path folder, String extension) throws IOException {
+    public static List<Path> getFilesFromFolder(Path folder, String regex) throws IOException {
         
         checkArgument(FileUtils.isValid(folder), "folder should be valid");
-        checkNotNull(extension, "extension should not be null");
+        checkNotNull(regex, "extension should not be null");
         
         return Files.walk(folder)
                 .filter(Files::isRegularFile)
                 .filter(file -> !file.getFileName().toString().equalsIgnoreCase("pareto-front.txt"))
-                .filter(s -> s.toString().endsWith(extension))
+                .filter(s -> s.toFile().getName().matches(regex))
                 .collect(Collectors.toList());
     }
     
